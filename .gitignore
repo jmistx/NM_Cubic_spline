@@ -1,0 +1,7 @@
+*.pdb
+CS.Test/obj/
+CS.Gui/bin/
+CS.Gui/obj/
+CS.Logic/bin/
+CS.Logic/obj/
+CS.Test/bin/
