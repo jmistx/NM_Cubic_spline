@@ -23,5 +23,15 @@ namespace CS.Test
             Assert.AreEqual(spline.Coefficients[0].D, 0);
             Assert.AreEqual(spline.Nodes, new[]{0, 1});
         }
+
+        [Test]
+        public void SplitIntervalByNodes()
+        {
+            var calculator = new Calculator();
+            var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 1);
+            Assert.AreEqual(2, spline.Coefficients.Length);
+            Assert.AreEqual(3, spline.Nodes.Length);
+            Assert.AreEqual(new[] {0, 0.5, 1}, spline.Nodes);
+        }
     }
 }
