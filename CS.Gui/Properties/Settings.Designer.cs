@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AP.Gui.Properties
+namespace CS.Gui.Properties
 {
 
 

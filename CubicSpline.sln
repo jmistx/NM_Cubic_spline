@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS.Gui", "HE.Gui\CS.Gui.csproj", "{F9B1092C-D599-4E80-8D58-55327354CB8D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS.Gui", "CS.Gui\CS.Gui.csproj", "{F9B1092C-D599-4E80-8D58-55327354CB8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS.Logic", "HE.Logic\CS.Logic.csproj", "{FEF71ECD-3FE3-4027-BBA0-5748903CC6B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS.Logic", "CS.Logic\CS.Logic.csproj", "{FEF71ECD-3FE3-4027-BBA0-5748903CC6B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS.Test", "HE.Test\CS.Test.csproj", "{2DC77FE2-C156-439E-A7F5-3B086AC28D95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS.Test", "CS.Test\CS.Test.csproj", "{2DC77FE2-C156-439E-A7F5-3B086AC28D95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

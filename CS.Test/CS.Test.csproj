@@ -42,14 +42,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="CalculatorShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HE.Logic\CS.Logic.csproj">
+    <ProjectReference Include="..\CS.Logic\CS.Logic.csproj">
       <Project>{fef71ecd-3fe3-4027-bba0-5748903cc6b6}</Project>
       <Name>CS.Logic</Name>
     </ProjectReference>
