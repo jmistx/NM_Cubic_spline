@@ -2,13 +2,12 @@ namespace CS.Logic
 {
     public class Spline
     {
-        public Spline(int numberOfIntervals)
+        public Spline(int numberOfSplines)
         {
-            int numberOfNodes = numberOfIntervals + 1;
-            Coefficients = new SplineCoefficients[numberOfIntervals];
-            Nodes = new double[numberOfNodes];
+            Coefficients = new SplineCoefficients[numberOfSplines];
+            Nodes = new double[numberOfSplines];
 
-            for (int i = 0; i < numberOfIntervals; i++)
+            for (int i = 0; i < numberOfSplines; i++)
             {
                 Coefficients[i] = new SplineCoefficients();
             }
@@ -30,11 +29,18 @@ namespace CS.Logic
         {
             var a = Nodes[0];
             var b = Nodes[Nodes.Length - 1];
-            var intervalsCount = Coefficients.Length;
-            var intervalX = (x - a);
-            var intervalIndex = (int)((intervalX/(b - a)) * (intervalsCount - 1));
 
-            var value = Value(intervalIndex, intervalIndex);
+            var numberOfSplines = Coefficients.Length;
+            var intervalX = (x - a);
+            var intervalIndex = (int)((intervalX / (b - a)) * numberOfSplines);
+
+            if (x >= b)
+            {
+                intervalIndex = numberOfSplines - 1;
+                intervalX = (b - a)/(numberOfSplines - 1);
+            }
+
+            var value = Value(intervalIndex, intervalX);
 
             return 0;
         }

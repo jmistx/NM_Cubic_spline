@@ -29,6 +29,12 @@ namespace CS.Test
             Assert.AreEqual(spline.Coefficients[0].B, 0);
             Assert.AreEqual(spline.Coefficients[0].C, 0);
             Assert.AreEqual(spline.Coefficients[0].D, 0);
+
+            Assert.AreEqual(spline.Coefficients[1].A, 0);
+            Assert.AreEqual(spline.Coefficients[1].B, 0);
+            Assert.AreEqual(spline.Coefficients[1].C, 0);
+            Assert.AreEqual(spline.Coefficients[1].D, 0);
+
             Assert.AreEqual(spline.Nodes, new[]{0, 1});
         }
 
@@ -38,7 +44,7 @@ namespace CS.Test
             var function = new Func<double, double>(x => 0);
             var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 1, function: function);
 
-            Assert.AreEqual(2, spline.Coefficients.Length);
+            Assert.AreEqual(3, spline.Coefficients.Length);
             Assert.AreEqual(3, spline.Nodes.Length);
             Assert.AreEqual(new[] {0, 0.5, 1}, spline.Nodes);
         }
@@ -72,9 +78,10 @@ namespace CS.Test
             var function = new Func<double, double>(x => x);
             var spline = calculator.FindSpline(numberOfIntervals: 3, a: 0, b: 3, function: function);
 
-            Assert.AreEqual(1, spline.Coefficients[0].A);
-            Assert.AreEqual(2, spline.Coefficients[1].A);
-            Assert.AreEqual(3, spline.Coefficients[2].A);
+            Assert.AreEqual(0, spline.Coefficients[0].A);
+            Assert.AreEqual(1, spline.Coefficients[1].A);
+            Assert.AreEqual(2, spline.Coefficients[2].A);
+            Assert.AreEqual(3, spline.Coefficients[3].A);
         }
     }
 }
