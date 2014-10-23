@@ -5,8 +5,12 @@ namespace CS.Logic
 {
     public class Calculator
     {
-        public Spline FindSpline(int numberOfIntervals, double a, double b, Func<double, double> function)
+        public Spline FindSpline(int numberOfIntervals, double a, double b, Func<double, double> function, double leftBound = 0, double rightBound = 0)
         {
+            if (numberOfIntervals < 2)
+            {
+                throw new ArgumentException("Number of intervals should not be less 2");
+            }
             var numberOfSplines = numberOfIntervals + 1;
 
             var spline = new Spline(numberOfSplines);
@@ -21,17 +25,18 @@ namespace CS.Logic
                 f[i] = function(spline.Nodes[i]);
             }
 
-            for (int i = 1; i < numberOfSplines; i++)
-            {
-                spline.Coefficients[i].A = f[i];
-            }
+            spline.Coefficients[0].C = leftBound;
+            spline.Coefficients[numberOfSplines - 1].C = rightBound;
+            //Calculate C
 
             for (int i = 1; i < numberOfSplines; i++)
             {
-                spline.Coefficients[i].D = (spline.Coefficients[i].C - spline.Coefficients[i - 1].C)/h +
-                                           (f[i] - f[i - 1])/h;
-            }
-            
+                spline.Coefficients[i].A = f[i];
+                spline.Coefficients[i].B = (h / 6) * (2 * spline.Coefficients[i].C + spline.Coefficients[i - 1].C) +
+                           (f[i] - f[i - 1]) / h;
+                spline.Coefficients[i].D = (spline.Coefficients[i].C - spline.Coefficients[i - 1].C) / h +
+                           (f[i] - f[i - 1]) / h;
+            }            
             return spline;
         }
 

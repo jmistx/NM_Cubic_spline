@@ -12,6 +12,7 @@ namespace CS.Test
     public class CalculatorShould
     {
         private Calculator calculator;
+        private readonly Func<double, double> constantZero = x => 0;
 
         [SetUp]
         public void SetUp()
@@ -22,27 +23,19 @@ namespace CS.Test
         [Test]
         public void ReturnTrivialSpline()
         {
-            var function = new Func<double, double>(x => 0);
-            var spline = calculator.FindSpline(numberOfIntervals: 1, a: 0, b: 1, function: function);
+            var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 1, function: constantZero);
 
-            Assert.AreEqual(spline.Coefficients[0].A, 0);
-            Assert.AreEqual(spline.Coefficients[0].B, 0);
-            Assert.AreEqual(spline.Coefficients[0].C, 0);
-            Assert.AreEqual(spline.Coefficients[0].D, 0);
+            Expect.CoefficientEquals(spline, 0, new double[]{0, 0, 0, 0});
+            Expect.CoefficientEquals(spline, 1, new double[]{0, 0, 0, 0});
+            Expect.CoefficientEquals(spline, 2, new double[]{0, 0, 0, 0});
 
-            Assert.AreEqual(spline.Coefficients[1].A, 0);
-            Assert.AreEqual(spline.Coefficients[1].B, 0);
-            Assert.AreEqual(spline.Coefficients[1].C, 0);
-            Assert.AreEqual(spline.Coefficients[1].D, 0);
-
-            Assert.AreEqual(spline.Nodes, new[]{0, 1});
+            Assert.AreEqual(spline.Nodes, new[]{0, 0.5, 1});
         }
 
         [Test]
         public void SplitIntervalByNodes()
         {
-            var function = new Func<double, double>(x => 0);
-            var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 1, function: function);
+            var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 1, function: constantZero);
 
             Assert.AreEqual(3, spline.Coefficients.Length);
             Assert.AreEqual(3, spline.Nodes.Length);
@@ -52,11 +45,11 @@ namespace CS.Test
         [Test]
         public void ApproximateTrivialFunctionExactly()
         {
-            var function = new Func<double, double>(x => 0);
-            var spline = calculator.FindSpline(numberOfIntervals: 1, a: 0, b: 1, function: function);
+            var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 1, function: constantZero);
 
             Assert.AreEqual(0, spline.Value(0));
-            Assert.AreEqual(0, spline.Value(0.5));
+            Assert.AreEqual(0, spline.Value(0.25));
+            Assert.AreEqual(0, spline.Value(0.75));
             Assert.AreEqual(0, spline.Value(1));
         }
 
@@ -82,6 +75,23 @@ namespace CS.Test
             Assert.AreEqual(1, spline.Coefficients[1].A);
             Assert.AreEqual(2, spline.Coefficients[2].A);
             Assert.AreEqual(3, spline.Coefficients[3].A);
+        }
+
+        [Test]
+        public void AcceptBoundaryConditions()
+        {
+            var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 1, function: constantZero, leftBound: 5,
+                rightBound: 6);
+            Assert.AreEqual(5, spline.Coefficients[0].C);
+            Assert.AreEqual(6, spline.Coefficients[2].C);
+        }
+
+        [Test]
+        public void DoNotAcceptLessThan2Intervals()
+        {
+            Expect.Exception<ArgumentException>(() => calculator.FindSpline(numberOfIntervals: 0, a: 0, b: 1, function: constantZero));
+            Expect.Exception<ArgumentException>(() => calculator.FindSpline(numberOfIntervals: 1, a: 0, b: 1, function: constantZero));
+            Expect.NoException(() => calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 1, function: constantZero));
         }
     }
 }
