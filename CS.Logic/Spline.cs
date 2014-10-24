@@ -30,19 +30,19 @@ namespace CS.Logic
             var a = Nodes[0];
             var b = Nodes[Nodes.Length - 1];
 
-            var numberOfSplines = Coefficients.Length;
+            var numberOfIntervals = Coefficients.Length - 1;
             var intervalX = (x - a);
-            var intervalIndex = (int)((intervalX / (b - a)) * numberOfSplines);
+            var intervalIndex = (int)((intervalX / (b - a)) * numberOfIntervals) + 1;
 
             if (x >= b)
             {
-                intervalIndex = numberOfSplines - 1;
-                intervalX = (b - a)/(numberOfSplines - 1);
+                intervalIndex = numberOfIntervals;
+                intervalX = (b - a) / (numberOfIntervals);
             }
 
             var value = Value(intervalIndex, intervalX);
 
-            return 0;
+            return value;
         }
     }
 }

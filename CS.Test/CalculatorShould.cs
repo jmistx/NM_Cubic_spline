@@ -53,15 +53,16 @@ namespace CS.Test
             Assert.AreEqual(0, spline.Value(1));
         }
 
-        [Ignore]
         [Test]
         public void ApproximateLinearFunctionExactly()
         {
             var function = new Func<double, double>(x => x);
-            var spline = calculator.FindSpline(numberOfIntervals: 1, a: 0, b: 2, function: function);
+            var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 2, function: function, leftBound: 1, rightBound: 1);
 
             Assert.AreEqual(0, spline.Value(0));
+            Assert.AreEqual(0.5, spline.Value(0.5));
             Assert.AreEqual(1, spline.Value(1));
+            Assert.AreEqual(1.5, spline.Value(1.5));
             Assert.AreEqual(2, spline.Value(2));
         }
 
