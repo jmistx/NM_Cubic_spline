@@ -18,8 +18,9 @@ namespace CS.Logic
 
             double h = (b - a)/numberOfIntervals;
 
-            var f = new double[numberOfSplines];
+            int numberOfNodes = spline.Nodes.Length;
 
+            var f = new double[numberOfSplines];
             for (int i = 0; i < numberOfSplines; i++)
             {
                 f[i] = function(spline.Nodes[i]);
@@ -27,6 +28,7 @@ namespace CS.Logic
 
             spline.Coefficients[0].C = leftBound;
             spline.Coefficients[numberOfSplines - 1].C = rightBound;
+
             CalculateCoefficientsC(spline.Coefficients, f, h);
 
             for (int i = 1; i < numberOfSplines; i++)
@@ -34,8 +36,7 @@ namespace CS.Logic
                 spline.Coefficients[i].A = f[i];
                 spline.Coefficients[i].B = (h/6)*(2*spline.Coefficients[i].C + spline.Coefficients[i - 1].C) +
                                            (f[i] - f[i - 1])/h;
-                spline.Coefficients[i].D = (spline.Coefficients[i].C - spline.Coefficients[i - 1].C)/h +
-                                           (f[i] - f[i - 1])/h;
+                spline.Coefficients[i].D = (spline.Coefficients[i].C - spline.Coefficients[i - 1].C)/h;
             }
             return spline;
         }
@@ -58,39 +59,17 @@ namespace CS.Logic
                 diagonal[i, 2] = h;
             }
 
-            for (int i = 1; i < numberOfSplines - 2; i++)
+            for (int i = 1; i < numberOfSplines - 1; i++)
             {
                 double[] f = function;
                 rightPart[i] = 6*(f[i + 1] - 2*f[i] + f[i - 1])/(2*h);
             }
 
-            var alpha = new double[numberOfSplines];
-            var beta = new double[numberOfSplines];
+            var result = Solve(diagonal, rightPart);
+
+            for (int i = (numberOfSplines - 1) - 1; i >= 1; i--)
             {
-                int i = 0;
-
-                double a = diagonal[i, 0];
-                double c = diagonal[i, 1];
-                double b = diagonal[i, 2];
-                double f = rightPart[i];
-
-                alpha[i] = (-b)/c;
-                beta[i] = f/c;
-            }
-
-            for (int i = 1; i < numberOfSplines; i++)
-            {
-                double a = diagonal[i, 0];
-                double c = diagonal[i, 1];
-                double b = diagonal[i, 2];
-                double f = rightPart[i];
-
-                alpha[i] = (-b)/(a*alpha[i - 1] + c);
-                beta[i] = (f - a*beta[i - 1])/(a*alpha[i - 1] + c);
-            }
-            for (int i = numberOfSplines - 1 - 1; i >= 1; i--)
-            {
-                coefficients[i].C = coefficients[i + 1].C*alpha[i + 1] + beta[i + 1];
+                coefficients[i].C = result[i];
             }
         }
 
@@ -105,19 +84,18 @@ namespace CS.Logic
             }
         }
 
-        public object Solve(double[,] diagonal, double[] rightPart)
+        public double[] Solve(double[,] diagonal, double[] rightPart)
         {
             var n = diagonal.GetLength(0);
             var result = new double[n];
             var cModified = new double[n];
             var fModified = new double[n];
+            ValidateMatrix(diagonal, n);
 
             {
                 int i = 0;
 
-                double a = diagonal[i, 0];
                 double c = diagonal[i, 1];
-                double b = diagonal[i, 2];
                 double f = rightPart[i];
 
                 cModified[i] = c;
@@ -142,6 +120,18 @@ namespace CS.Logic
                 result[i] = (fModified[i] - b * result[i + 1]) / cModified[i];
             }
             return result;
+        }
+
+        private static void ValidateMatrix(double[,] diagonal, int n)
+        {
+            if (diagonal[0, 0] != 0)
+            {
+                throw new ArgumentException("A[0] must be 0");
+            }
+            if (diagonal[n - 1, 2] != 0)
+            {
+                throw new ArgumentException("B[n-1] must be 0");
+            }
         }
     }
 }

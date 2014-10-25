@@ -55,18 +55,30 @@ namespace CS.Test
             Assert.AreEqual(0, spline.Value(1));
         }
 
-        [Ignore]
         [Test]
         public void ApproximateLinearFunctionExactly()
         {
             var function = new Func<double, double>(x => x);
-            var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 2, function: function, leftBound: 0, rightBound: 0);
+            var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 2, function: function);
 
             Assert.AreEqual(0, spline.Value(0));
             Assert.AreEqual(0.5, spline.Value(0.5));
             Assert.AreEqual(1, spline.Value(1));
             Assert.AreEqual(1.5, spline.Value(1.5));
             Assert.AreEqual(2, spline.Value(2));
+        }
+
+        [Test]
+        public void ApproximateSquareFunctionExactly()
+        {
+            var function = new Func<double, double>(x => 4 * x*x - 2);
+            var spline = calculator.FindSpline(numberOfIntervals: 2, a: -4, b: 4, function: function);
+
+            Assert.AreEqual(-2, spline.Value(0));
+            Assert.AreEqual(-1, spline.Value(0.5));
+            Assert.AreEqual(-1, spline.Value(-0.5));
+            Assert.AreEqual(2, spline.Value(1));
+            Assert.AreEqual(2, spline.Value(-1));
         }
 
         [Test]
@@ -98,25 +110,24 @@ namespace CS.Test
             Expect.NoException(() => calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 1, function: constantZero));
         }
 
-        [Ignore]
         [Test]
         public void ProvideTridiagonalMatrixAlgorithm()
         {
+            var rightPart = new double[] { 1, 1, 1 };
             var diagonal = new double[,]
             {
-                {0, 1, 1},
                 {1, 1, 1},
+                {1, 2, 1},
                 {1, 1, 0},
             };
-            var rightPart = new double[]
+            Expect.Exception<ArgumentException>(() => calculator.Solve(diagonal, rightPart));
+            diagonal = new double[,]
             {
-                1, 
-                1, 
-                1
+                {0, 1, 1},
+                {1, 2, 1},
+                {1, 1, 1},
             };
-            var result = calculator.Solve(diagonal, rightPart);
-
-            Assert.AreEqual(new[] {0, 1, 0}, result);
+            Expect.Exception<ArgumentException>(() => calculator.Solve(diagonal, rightPart));
         }
 
         [Test]

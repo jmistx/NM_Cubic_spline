@@ -22,7 +22,10 @@ namespace CS.Logic
             var b = Coefficients[interval].B;
             var c = Coefficients[interval].C;
             var d = Coefficients[interval].D;
-            return a + b * x + (1.0/2.0) * c * x * x + (1.0/6.0) * d * x * x * x;
+            var xi = Nodes[interval];
+            var dx = x - xi;
+
+            return a + b * dx + (1.0/2.0) * c * dx * dx + (1.0/6.0) * d * dx * dx * dx;
         }
 
         public double Value(double x)
@@ -37,10 +40,9 @@ namespace CS.Logic
             if (x >= b)
             {
                 intervalIndex = numberOfIntervals;
-                intervalX = (b - a) / (numberOfIntervals);
             }
 
-            var value = Value(intervalIndex, intervalX);
+            var value = Value(intervalIndex, x);
 
             return value;
         }
