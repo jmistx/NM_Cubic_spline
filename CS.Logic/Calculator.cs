@@ -104,5 +104,44 @@ namespace CS.Logic
                 spline.Nodes[i] = a + ((b - a)/numberOfIntervals)*i;
             }
         }
+
+        public object Solve(double[,] diagonal, double[] rightPart)
+        {
+            var n = diagonal.GetLength(0);
+            var result = new double[n];
+            var cModified = new double[n];
+            var fModified = new double[n];
+
+            {
+                int i = 0;
+
+                double a = diagonal[i, 0];
+                double c = diagonal[i, 1];
+                double b = diagonal[i, 2];
+                double f = rightPart[i];
+
+                cModified[i] = c;
+                fModified[i] = f;
+            }
+
+            for (int i = 1; i < n; i++)
+            {
+                double a = diagonal[i, 0];
+                double c = diagonal[i, 1];
+                double b = diagonal[i-1, 2];
+                double f = rightPart[i];
+
+                cModified[i] = c - a / cModified[i - 1] * b;
+                fModified[i] = f - a * fModified[i - 1] / cModified[i - 1];
+            }
+
+            result[n - 1] = fModified[n - 1]/cModified[n - 1];
+            for (int i = (n - 1) - 1; i >= 0; i--)
+            {
+                double b = diagonal[i, 2];
+                result[i] = (fModified[i] - b * result[i + 1]) / cModified[i];
+            }
+            return result;
+        }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 using CS.Logic;
 using NUnit.Framework;
 
@@ -53,11 +55,12 @@ namespace CS.Test
             Assert.AreEqual(0, spline.Value(1));
         }
 
+        [Ignore]
         [Test]
         public void ApproximateLinearFunctionExactly()
         {
             var function = new Func<double, double>(x => x);
-            var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 2, function: function, leftBound: 1, rightBound: 1);
+            var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 2, function: function, leftBound: 0, rightBound: 0);
 
             Assert.AreEqual(0, spline.Value(0));
             Assert.AreEqual(0.5, spline.Value(0.5));
@@ -93,6 +96,47 @@ namespace CS.Test
             Expect.Exception<ArgumentException>(() => calculator.FindSpline(numberOfIntervals: 0, a: 0, b: 1, function: constantZero));
             Expect.Exception<ArgumentException>(() => calculator.FindSpline(numberOfIntervals: 1, a: 0, b: 1, function: constantZero));
             Expect.NoException(() => calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 1, function: constantZero));
+        }
+
+        [Ignore]
+        [Test]
+        public void ProvideTridiagonalMatrixAlgorithm()
+        {
+            var diagonal = new double[,]
+            {
+                {0, 1, 1},
+                {1, 1, 1},
+                {1, 1, 0},
+            };
+            var rightPart = new double[]
+            {
+                1, 
+                1, 
+                1
+            };
+            var result = calculator.Solve(diagonal, rightPart);
+
+            Assert.AreEqual(new[] {0, 1, 0}, result);
+        }
+
+        [Test]
+        public void ProvideTridiagonalMatrixAlgorithm2()
+        {
+            var diagonal = new double[,]
+            {
+                {0,-2, 1},
+                {1, 1, 1},
+                {1, 1, 0},
+            };
+            var rightPart = new double[]
+            {
+                1, 
+                1, 
+                1
+            };
+            var result = calculator.Solve(diagonal, rightPart);
+
+            Assert.AreEqual(new[] { 0, 1, 0 }, result);
         }
     }
 }
