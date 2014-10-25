@@ -73,13 +73,13 @@ namespace CS.Test
         public void ApproximateSquareFunctionExactly()
         {
             var function = new Func<double, double>(x => 4 * x*x - 2);
-            var spline = calculator.FindSpline(numberOfIntervals: 3, a: -16, b: 16, function: function, leftBound: 4, rightBound: 4);
+            var spline = calculator.FindSpline(numberOfIntervals: 8000, a: -16, b: 16, function: function, leftBound: 4, rightBound: 4);
 
-            Assert.AreEqual(-2, spline.Value(0));
-            Assert.AreEqual(-1, spline.Value(0.5));
-            Assert.AreEqual(-1, spline.Value(-0.5));
-            Assert.AreEqual(2, spline.Value(1));
-            Assert.AreEqual(2, spline.Value(-1));
+            Expect.FloatsAreEqual(-2, spline.Value(0));
+            Expect.FloatsAreEqual(-1, spline.Value(0.5));
+            Expect.FloatsAreEqual(-1, spline.Value(-0.5));
+            Expect.FloatsAreEqual(2, spline.Value(1));
+            Expect.FloatsAreEqual(2, spline.Value(-1));
         }
         
         [Test]
