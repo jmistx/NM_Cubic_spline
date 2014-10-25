@@ -26,6 +26,7 @@ namespace CS.Logic
                 f[i] = function(spline.Nodes[i]);
             }
 
+            spline.Coefficients[0].A = f[0];
             spline.Coefficients[0].C = leftBound;
             spline.Coefficients[numberOfSplines - 1].C = rightBound;
 

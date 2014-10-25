@@ -38,5 +38,11 @@ namespace CS.Test
             Assert.AreEqual(coeffs[2], spline.Coefficients[interval].C);
             Assert.AreEqual(coeffs[3], spline.Coefficients[interval].D);
         }
+
+        public static void FloatsAreEqual(double expect, double actual)
+        {
+            const double tolerance = 0.00001;
+            Assert.LessOrEqual(Math.Abs(expect - actual), tolerance, string.Format("floats not same. actual: {0} expected: {1}", actual, expect));
+        }
     }
 }

@@ -68,17 +68,42 @@ namespace CS.Test
             Assert.AreEqual(2, spline.Value(2));
         }
 
+
         [Test]
         public void ApproximateSquareFunctionExactly()
         {
             var function = new Func<double, double>(x => 4 * x*x - 2);
-            var spline = calculator.FindSpline(numberOfIntervals: 2, a: -4, b: 4, function: function);
+            var spline = calculator.FindSpline(numberOfIntervals: 3, a: -16, b: 16, function: function, leftBound: 4, rightBound: 4);
 
             Assert.AreEqual(-2, spline.Value(0));
             Assert.AreEqual(-1, spline.Value(0.5));
             Assert.AreEqual(-1, spline.Value(-0.5));
             Assert.AreEqual(2, spline.Value(1));
             Assert.AreEqual(2, spline.Value(-1));
+        }
+        
+        [Test]
+        public void UseGlueConditions()
+        {
+            var function = new Func<double, double>(x => 4 * x * x - 2);
+            var spline = calculator.FindSpline(numberOfIntervals: 6, a: -4, b: 4, function: function, leftBound: 4, rightBound: 4);
+            for (int i = 1; i < 6; i++)
+            {
+                var x = spline.Nodes[i - 1];
+                Expect.FloatsAreEqual(spline.Value(i - 1, x), spline.Value(i, x));
+            }
+        }
+
+        [Test]
+        public void UseGlueConditions2()
+        {
+            var function = new Func<double, double>(x => 4 * x - 2);
+            var spline = calculator.FindSpline(numberOfIntervals: 4, a: -4, b: 4, function: function);
+            for (int i = 1; i < 4; i++)
+            {
+                var x = spline.Nodes[i - 1];
+                Assert.AreEqual(spline.Value(i - 1, x), spline.Value(i, x));
+            }
         }
 
         [Test]
