@@ -63,7 +63,7 @@ namespace CS.Logic
             for (int i = 1; i < numberOfSplines - 1; i++)
             {
                 double[] f = function;
-                rightPart[i] = 6*(f[i + 1] - 2*f[i] + f[i - 1])/(2*h);
+                rightPart[i] = 6*(f[i + 1] - 2*f[i] + f[i - 1])/h;
             }
 
             var result = Solve(diagonal, rightPart);

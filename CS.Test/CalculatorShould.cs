@@ -72,18 +72,26 @@ namespace CS.Test
         [Test]
         public void ApproximateSquareFunctionExactly()
         {
-            var function = new Func<double, double>(x => 4 * x*x - 2);
-            var spline = calculator.FindSpline(numberOfIntervals: 8000, a: -16, b: 16, function: function, leftBound: 4, rightBound: 4);
+            var function = new Func<double, double>(x => x*x);
+            var spline = calculator.FindSpline(numberOfIntervals: 2, a: -2, b: 2, function: function, leftBound: 2, rightBound: 2);
 
-            Expect.FloatsAreEqual(-2, spline.Value(0));
-            Expect.FloatsAreEqual(-1, spline.Value(0.5));
-            Expect.FloatsAreEqual(-1, spline.Value(-0.5));
-            Expect.FloatsAreEqual(2, spline.Value(1));
-            Expect.FloatsAreEqual(2, spline.Value(-1));
+            Expect.FloatsAreEqual(0, spline.Value(0));
+            
+            Expect.FloatsAreEqual(0.25, spline.Value(0.5));
+            Expect.FloatsAreEqual(0.25, spline.Value(-0.5));
+            
+            Expect.FloatsAreEqual(1, spline.Value(1));
+            Expect.FloatsAreEqual(1, spline.Value(-1));
+
+            Expect.FloatsAreEqual(2.25, spline.Value(1.5));
+            Expect.FloatsAreEqual(2.25, spline.Value(-1.5));
+
+            Expect.FloatsAreEqual(4, spline.Value(2));
+            Expect.FloatsAreEqual(4, spline.Value(-2));
         }
         
         [Test]
-        public void UseGlueConditions()
+        public void UseSmoothnessConditions()
         {
             var function = new Func<double, double>(x => 4 * x * x - 2);
             var spline = calculator.FindSpline(numberOfIntervals: 6, a: -4, b: 4, function: function, leftBound: 4, rightBound: 4);
@@ -95,7 +103,7 @@ namespace CS.Test
         }
 
         [Test]
-        public void UseGlueConditions2()
+        public void UseSmoothnessConditions2()
         {
             var function = new Func<double, double>(x => 4 * x - 2);
             var spline = calculator.FindSpline(numberOfIntervals: 4, a: -4, b: 4, function: function);
