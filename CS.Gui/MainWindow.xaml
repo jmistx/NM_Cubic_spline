@@ -1,8 +1,49 @@
 ﻿<Window x:Class="CS.Gui.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        xmlns:oxy="http://oxyplot.org/wpf"
+        Title="MainWindow" Height="493.856" Width="842.373">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200px"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Height="300">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Grid.Row="0">Number of intervals</Label>
+            <TextBox Grid.Column ="1" Grid.Row="0" Text="{Binding NumberOfIntervals}"></TextBox>
+            <Label Grid.Column="0" Grid.Row="1">Left Point</Label>
+            <TextBox Grid.Column ="1" Grid.Row="1" Text="{Binding LeftPoint}"></TextBox>
+            <Label Grid.Column="0" Grid.Row="2">Right Point</Label>
+            <TextBox Grid.Column ="1" Grid.Row="2" Text="{Binding RightPoint}"></TextBox>
+            <Label Grid.Column="0" Grid.Row="3">Left Bound</Label>
+            <TextBox Grid.Column ="1" Grid.Row="3" Text="{Binding LeftBound}"></TextBox>
+            <Label Grid.Column="0" Grid.Row="4">Right Bound</Label>
+            <TextBox Grid.Column ="1" Grid.Row="4" Text="{Binding RightBound}"></TextBox>
+
+            <Button Grid.ColumnSpan ="2" Grid.Column="0" Grid.Row="5" Command="{Binding DrawSplineCommand}" Height="25" VerticalAlignment="Top" >Spline!</Button>            
+        </Grid>
+        <TabControl Grid.Column ="1">
+            <TabItem Header="Spline plot">
+                <oxy:PlotView  Model="{Binding SplinePlot}" />    
+            </TabItem>
+            <TabItem Header="Spline Coefficients">
+                <DataGrid ItemsSource="{Binding Spline.Coefficients}" LoadingRow="DataGrid_OnLoadingRow">
+                    
+                </DataGrid>
+            </TabItem>
+        </TabControl>
         
     </Grid>
 </Window>

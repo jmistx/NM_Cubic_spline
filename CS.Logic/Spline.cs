@@ -2,7 +2,7 @@ namespace CS.Logic
 {
     public class Spline
     {
-        public Spline(int numberOfSplines)
+        internal Spline(int numberOfSplines)
         {
             Coefficients = new SplineCoefficients[numberOfSplines];
             Nodes = new double[numberOfSplines];
