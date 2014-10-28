@@ -1,4 +1,4 @@
-namespace AP.Logic
+namespace CS.Logic
 {
     public class SplineCoefficientsViewModel
     {
