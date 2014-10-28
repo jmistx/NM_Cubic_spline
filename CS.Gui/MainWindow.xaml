@@ -39,7 +39,7 @@
                 <oxy:PlotView  Model="{Binding SplinePlot}" />    
             </TabItem>
             <TabItem Header="Spline Coefficients">
-                <DataGrid ItemsSource="{Binding Spline.Coefficients}" LoadingRow="DataGrid_OnLoadingRow">
+                <DataGrid ItemsSource="{Binding SplineViewModel.Coefficients}" LoadingRow="DataGrid_OnLoadingRow">
                     
                 </DataGrid>
             </TabItem>

@@ -5,7 +5,6 @@ namespace CS.Logic
         internal Spline(int numberOfSplines)
         {
             Coefficients = new SplineCoefficients[numberOfSplines];
-            Nodes = new double[numberOfSplines];
 
             for (int i = 0; i < numberOfSplines; i++)
             {
@@ -15,6 +14,8 @@ namespace CS.Logic
 
         public SplineCoefficients[] Coefficients { get; set; }
         public double[] Nodes { get; set; }
+        public double A { get; set; }
+        public double B { get; set; }
 
         public double Value(int interval, double x)
         {

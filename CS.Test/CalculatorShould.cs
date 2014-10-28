@@ -181,20 +181,20 @@ namespace CS.Test
         public void ProvideTridiagonalMatrixAlgorithm()
         {
             var rightPart = new double[] { 1, 1, 1 };
-            var diagonal = new double[,]
+            var diagonal1 = new double[,]
             {
                 {1, 1, 1},
                 {1, 2, 1},
                 {1, 1, 0},
             };
-            Expect.Exception<ArgumentException>(() => calculator.Solve(diagonal, rightPart));
-            diagonal = new double[,]
+            Expect.Exception<ArgumentException>(() => calculator.Solve(diagonal1, rightPart));
+            var diagonal2 = new double[,]
             {
                 {0, 1, 1},
                 {1, 2, 1},
                 {1, 1, 1},
             };
-            Expect.Exception<ArgumentException>(() => calculator.Solve(diagonal, rightPart));
+            Expect.Exception<ArgumentException>(() => calculator.Solve(diagonal2, rightPart));
         }
 
         [Test]
@@ -215,6 +215,43 @@ namespace CS.Test
             var result = calculator.Solve(diagonal, rightPart);
 
             Assert.AreEqual(new[] { 0, 1, 0 }, result);
+        }
+
+        [Test]
+        public void ShouldCanCompareFunctionAndSpline()
+        {
+            var function = new Func<double, double>(x => 1);
+            var fakeFunction = new Func<double, double>(x => 0);
+            var spline = calculator.FindSpline(numberOfIntervals: 4, a: 0, b: 1, function: fakeFunction);
+            const int numberOfIntervals = 2;
+            var comparisonTable = calculator.Compare(function, spline, numberOfIntervals);
+            Assert.AreEqual(numberOfIntervals + 1, comparisonTable.Values.Length);
+            
+            Assert.AreEqual(0, comparisonTable.Values[0].Number);
+            Assert.AreEqual(0, comparisonTable.Values[0].X);      
+  
+            Assert.AreEqual(1, comparisonTable.Values[1].Number);
+            Assert.AreEqual(.5,comparisonTable.Values[1].X);
+
+            Assert.AreEqual(2, comparisonTable.Values[2].Number);
+            Assert.AreEqual(1, comparisonTable.Values[2].X);
+
+            for (int i = 0; i < numberOfIntervals; i++)
+            {
+                Assert.AreEqual(1, comparisonTable.Values[i].Function);
+                Assert.AreEqual(0, comparisonTable.Values[i].Spline);
+                Assert.AreEqual(1, comparisonTable.Values[i].AbsDifference);
+                Assert.AreEqual(0, comparisonTable.Values[i].FunctionDerivative);
+                Assert.AreEqual(0, comparisonTable.Values[i].SplineDerivative);
+                Assert.AreEqual(0, comparisonTable.Values[i].AbsDerivativesDifference);
+            }
+
+            Assert.AreEqual(4, comparisonTable.NumberOfSplineIntervals);
+            Assert.AreEqual(2, comparisonTable.NumberOfComparisonIntervals);
+            
+            Assert.AreEqual(1, comparisonTable.MaximumDifference);
+            Assert.AreEqual(0, comparisonTable.MaximumDerivativesDifference);
+
         }
     }
 }

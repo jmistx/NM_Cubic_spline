@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace CS.Logic
 {
@@ -13,12 +14,14 @@ namespace CS.Logic
             }
             int numberOfSplines = numberOfIntervals + 1;
 
-            var spline = new Spline(numberOfSplines);
-            CalculateNodes(numberOfSplines, a, b, spline);
+            var spline = new Spline(numberOfSplines)
+            {
+                Nodes = CalculateNodes(numberOfIntervals, a, b),
+                A = a,
+                B = b
+            };
 
             double h = (b - a)/numberOfIntervals;
-
-            int numberOfNodes = spline.Nodes.Length;
 
             var f = new double[numberOfSplines];
             for (int i = 0; i < numberOfSplines; i++)
@@ -74,15 +77,17 @@ namespace CS.Logic
             }
         }
 
-        private static void CalculateNodes(int numberOfSplines, double a, double b, Spline spline)
+        private static double[] CalculateNodes(int numberOfIntervals, double a, double b)
         {
-            int numberOfNodes = numberOfSplines;
-            int numberOfIntervals = numberOfSplines - 1;
+            int numberOfNodes = numberOfIntervals + 1;
+
+            var nodes = new double[numberOfNodes];
 
             for (int i = 0; i < numberOfNodes; i++)
             {
-                spline.Nodes[i] = a + ((b - a)/numberOfIntervals)*i;
+                nodes[i] = a + ((b - a) / numberOfIntervals) * i;
             }
+            return nodes;
         }
 
         public double[] Solve(double[,] diagonal, double[] rightPart)
@@ -134,5 +139,57 @@ namespace CS.Logic
                 throw new ArgumentException("B[n-1] must be 0");
             }
         }
+
+        public ComparisonTable Compare(Func<double, double> function, Spline spline, int numberOfIntervals)
+        {
+            var comparisonTable = new ComparisonTable
+            {
+                NumberOfComparisonIntervals = numberOfIntervals,
+                NumberOfSplineIntervals = spline.Coefficients.Length - 1
+            };
+            var nodes = CalculateNodes(numberOfIntervals, spline.A, spline.B);
+            comparisonTable.Values = new ComparisonTableLine[nodes.Length];
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                comparisonTable.Values[i] = new ComparisonTableLine
+                {
+                    Number = i,
+                    X = nodes[i],
+                    Function = function(nodes[i]),
+                    Spline = spline.Value(nodes[i]),
+                    AbsDerivativesDifference = 0,
+                    FunctionDerivative = 0,
+                    SplineDerivative = 0
+                };
+
+                comparisonTable.Values[i].AbsDifference = Math.Abs(
+                    comparisonTable.Values[i].Function - comparisonTable.Values[i].Spline);
+                
+            }
+
+            comparisonTable.MaximumDifference = comparisonTable.Values.Select(_ => _.AbsDifference).Max();
+            return comparisonTable;
+        }
+    }
+
+    public class ComparisonTable
+    {
+        public ComparisonTableLine[] Values { get; set; }
+        public int NumberOfSplineIntervals { get; set; }
+        public int NumberOfComparisonIntervals { get; set; }
+        public double MaximumDifference { get; set; }
+        public double MaximumDerivativesDifference { get; set; }
+    }
+
+    public class ComparisonTableLine
+    {
+        public int Number { get; set; }
+        public double X { get; set; }
+        public double Function { get; set; }
+        public double Spline { get; set; }
+        public double AbsDifference { get; set; }
+        public double FunctionDerivative { get; set; }
+        public double SplineDerivative { get; set; }
+        public double AbsDerivativesDifference { get; set; }
     }
 }
