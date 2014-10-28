@@ -140,7 +140,7 @@ namespace CS.Logic
             }
         }
 
-        public ComparisonTable Compare(Func<double, double> function, Spline spline, int numberOfIntervals)
+        public ComparisonTable Compare(Func<double, double> function, Func<double, double> derivative, Spline spline, int numberOfIntervals)
         {
             var comparisonTable = new ComparisonTable
             {
@@ -157,17 +157,22 @@ namespace CS.Logic
                     X = nodes[i],
                     Function = function(nodes[i]),
                     Spline = spline.Value(nodes[i]),
-                    AbsDerivativesDifference = 0,
-                    FunctionDerivative = 0,
-                    SplineDerivative = 0
+                    FunctionDerivative = derivative(nodes[i]),
+                    SplineDerivative = spline.DerivativeValue(nodes[i])
                 };
 
                 comparisonTable.Values[i].AbsDifference = Math.Abs(
                     comparisonTable.Values[i].Function - comparisonTable.Values[i].Spline);
+
+                comparisonTable.Values[i].AbsDerivativesDifference = Math.Abs(
+                    comparisonTable.Values[i].FunctionDerivative 
+                    - comparisonTable.Values[i].SplineDerivative);
                 
             }
 
             comparisonTable.MaximumDifference = comparisonTable.Values.Select(_ => _.AbsDifference).Max();
+            comparisonTable.MaximumDerivativesDifference =
+                comparisonTable.Values.Select(_ => _.AbsDerivativesDifference).Max();
             return comparisonTable;
         }
     }

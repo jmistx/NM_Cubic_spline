@@ -233,7 +233,7 @@ namespace CS.Test
             var fakeFunction = new Func<double, double>(x => 0);
             var spline = calculator.FindSpline(numberOfIntervals: 4, a: 0, b: 1, function: fakeFunction);
             const int numberOfIntervals = 2;
-            var comparisonTable = calculator.Compare(function, spline, numberOfIntervals);
+            var comparisonTable = calculator.Compare(function, constantZero, spline, numberOfIntervals);
             Assert.AreEqual(numberOfIntervals + 1, comparisonTable.Values.Length);
             
             Assert.AreEqual(0, comparisonTable.Values[0].Number);
@@ -272,12 +272,26 @@ namespace CS.Test
                 rightBound: 14);
             Expect.FunctionsSameOnInterval(function, spline.Value, -2, 2);
             Expect.FunctionsSameOnInterval(derivative, spline.DerivativeValue, -2, 2);
+
+            function = new Func<double, double>(x => x * x * 0.5);
+            derivative = new Func<double, double>(x => x);
+            spline = calculator.FindSpline(numberOfIntervals: 2, a: -3, b: 3, function: function, leftBound: 1, rightBound: 1);
+            Expect.FunctionsSameOnInterval(function, spline.Value, -1, 3);
+            Expect.FunctionsSameOnInterval(derivative, spline.DerivativeValue, -1, 3);
         }
 
-        [Ignore]
         [Test]
         public void CanCompareFunctionDerivativeAndSplineDerivative()
         {
+            var function = new Func<double, double>(x => 5*x);
+            var derivative = new Func<double, double>(x => 5);
+            var fakeFunction = new Func<double, double>(x => x * x * 0.5);
+            var fakeDerivative = new Func<double, double>(x => x);
+            var spline = calculator.FindSpline(numberOfIntervals: 4, a: -1, b: 3, function: fakeFunction, leftBound: 1, rightBound: 1);
+            
+            const int numberOfIntervals = 2;
+            var comparisonTable = calculator.Compare(function, derivative, spline, numberOfIntervals);
+            Assert.AreEqual(6, comparisonTable.MaximumDerivativesDifference);
             
         }
     }
