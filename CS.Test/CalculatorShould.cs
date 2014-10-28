@@ -2,14 +2,48 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
+using AP.Logic;
 using CS.Logic;
 using NUnit.Framework;
 
 namespace CS.Test
 {
+
+    [TestFixture]
+    public class SplineViewModelShould
+    {
+        [Test]
+        public void ProvideCoefficientsTable()
+        {
+            var calculator = new Calculator();
+            var function = new Func<double, double>(x => 6*x*x*x*x);
+            var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 2, function: function);
+            var splineViewModel = new SplineViewModel(spline);
+
+            Assert.AreEqual(1, splineViewModel.Coefficients[0].Number);
+            Assert.AreEqual(0, splineViewModel.Coefficients[0].LeftX);
+            Assert.AreEqual(1, splineViewModel.Coefficients[0].RightX);
+
+            Assert.AreEqual(spline.Coefficients[1].A, splineViewModel.Coefficients[0].A);
+            Assert.AreEqual(spline.Coefficients[1].B, splineViewModel.Coefficients[0].B);
+            Assert.AreEqual(spline.Coefficients[1].C, splineViewModel.Coefficients[0].C);
+            Assert.AreEqual(spline.Coefficients[1].D, splineViewModel.Coefficients[0].D);
+
+            Assert.AreEqual(2, splineViewModel.Coefficients[1].Number);
+            Assert.AreEqual(1, splineViewModel.Coefficients[1].LeftX);
+            Assert.AreEqual(2, splineViewModel.Coefficients[1].RightX);
+
+            Assert.AreEqual(spline.Coefficients[2].A, splineViewModel.Coefficients[1].A);
+            Assert.AreEqual(spline.Coefficients[2].B, splineViewModel.Coefficients[1].B);
+            Assert.AreEqual(spline.Coefficients[2].C, splineViewModel.Coefficients[1].C);
+            Assert.AreEqual(spline.Coefficients[2].D, splineViewModel.Coefficients[1].D);
+        }
+    }
+
     [TestFixture]
     public class CalculatorShould
     {
