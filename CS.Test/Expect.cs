@@ -44,5 +44,15 @@ namespace CS.Test
             const double tolerance = 0.00001;
             Assert.LessOrEqual(Math.Abs(expect - actual), tolerance, string.Format("floats not same. actual: {0} expected: {1}", actual, expect));
         }
+
+        public static void FunctionsSameOnInterval(Func<double, double> function, Func<double, double> function2, double a, double b)
+        {
+            const int numberOfNodes = 1000;
+            for (int i = 0; i < numberOfNodes; i++)
+            {
+                double x = a + ((b - a) / (numberOfNodes - 1)) * i;
+                Expect.FloatsAreEqual(function(x), function2(x));
+            }
+        }
     }
 }

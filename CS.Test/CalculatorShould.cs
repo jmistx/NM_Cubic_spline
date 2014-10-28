@@ -79,7 +79,7 @@ namespace CS.Test
         }
 
         [Test]
-        public void ApproximateTrivialFunctionExactly()
+        public void InterpolateTrivialFunctionExactly()
         {
             var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 1, function: constantZero);
 
@@ -90,7 +90,7 @@ namespace CS.Test
         }
 
         [Test]
-        public void ApproximateLinearFunctionExactly()
+        public void InterpolateLinearFunctionExactly()
         {
             var function = new Func<double, double>(x => x);
             var spline = calculator.FindSpline(numberOfIntervals: 2, a: 0, b: 2, function: function);
@@ -104,7 +104,7 @@ namespace CS.Test
 
 
         [Test]
-        public void ApproximateSquareFunctionExactly()
+        public void InterpolateSquareFunctionExactly()
         {
             var function = new Func<double, double>(x => x*x);
             var spline = calculator.FindSpline(numberOfIntervals: 2, a: -2, b: 2, function: function, leftBound: 2, rightBound: 2);
@@ -122,6 +122,15 @@ namespace CS.Test
 
             Expect.FloatsAreEqual(4, spline.Value(2));
             Expect.FloatsAreEqual(4, spline.Value(-2));
+        }
+
+        [Test]
+        public void InterpolateCubicFunctionExactly()
+        {
+            var function = new Func<double, double>(x => x*x*x - 10*x*x - 2*x - 2);
+            var spline = calculator.FindSpline(numberOfIntervals: 2, a: -2, b: 2, function: function, leftBound: -32, rightBound: -8);
+            const double numberOfNodes = 100;
+            Expect.FunctionsSameOnInterval(function, spline.Value, a: -2, b: 2);
         }
         
         [Test]
@@ -252,6 +261,24 @@ namespace CS.Test
             Assert.AreEqual(1, comparisonTable.MaximumDifference);
             Assert.AreEqual(0, comparisonTable.MaximumDerivativesDifference);
 
+        }
+
+        [Test]
+        public void CanCalculateSplineDerivative()
+        {
+            var function = new Func<double, double>(x => x*x*x + x*x + 5*x ); 
+            var derivative = new Func<double, double>(x => 3*x*x + 2*x + 5 );
+            var spline = calculator.FindSpline(numberOfIntervals: 2, a: -2, b: 2, function: function, leftBound: -10,
+                rightBound: 14);
+            Expect.FunctionsSameOnInterval(function, spline.Value, -2, 2);
+            Expect.FunctionsSameOnInterval(derivative, spline.DerivativeValue, -2, 2);
+        }
+
+        [Ignore]
+        [Test]
+        public void CanCompareFunctionDerivativeAndSplineDerivative()
+        {
+            
         }
     }
 }
