@@ -19,6 +19,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
@@ -35,7 +36,14 @@
             <Label Grid.Column="0" Grid.Row="4">Right Bound</Label>
             <TextBox Grid.Column ="1" Grid.Row="4" Text="{Binding RightBound}"></TextBox>
 
-            <Button Grid.ColumnSpan ="2" Grid.Column="0" Grid.Row="5" Command="{Binding DrawSplineCommand}" Height="25" VerticalAlignment="Top" >Spline!</Button>            
+            <Button Grid.ColumnSpan ="2" Grid.Column="0" Grid.Row="5" Command="{Binding DrawSplineCommand}" Height="25" VerticalAlignment="Top" >Spline!</Button>
+            <StackPanel Grid.Row="6" Grid.Column="0">
+                <RadioButton Command="{Binding SetTestFunctionCommand}" IsChecked="True">phi(x)</RadioButton>
+                <RadioButton Command="{Binding SetWorkFunctionCommand}">f(x)</RadioButton>
+                <RadioButton Command="{Binding SetWorkFunctionCos10Command}">f(x) + cos(10x)</RadioButton>
+                <RadioButton Command="{Binding SetWorkFunctionCos100Command}">f(x) + cos(100x)</RadioButton>
+            </StackPanel>
+            
         </Grid>
         <TabControl Grid.Column ="1">
             <TabItem Header="Spline plot">
