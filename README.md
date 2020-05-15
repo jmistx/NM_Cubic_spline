@@ -1,6 +1,6 @@
-Cubic spline
+[University] Cubic spline interpolation
 =============
 
-Задача из курса ННГУ по Численным методам. Построение кубического сплайна. 
+Task from [UNN (Lobachevsky State University)](http://eng.unn.ru/) for Numerical Methods discipline. [Cubic spline interpolation](https://en.wikiversity.org/wiki/Cubic_Spline_Interpolation).
 
-Disclaimer: Этому коду много лет. Технологии ушли вперёд. Но я всё равно считаю его чистым и красивым. Если вам по какой-то причине интересно посмотреть, как я писал код, советую начать смотреть с тестов.
+Disclaimer: This code is old but I still think it is clean and nice. If you somewhy interested my codestyle, my advise to start from tests.
