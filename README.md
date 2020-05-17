@@ -7,3 +7,6 @@ Cubic spline interpolation
 Disclaimer: This code is old but I still think it is clean and nice. 
 If you somewhy interested my codestyle, I advise to start from tests.
 ```
+
+![screenshot1](./screenshot.png)
+![screenshot2](./screenshot2.png)
